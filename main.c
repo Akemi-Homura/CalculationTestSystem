@@ -1,5 +1,9 @@
 # include <stdio.h>
 # include <stdlib.h>
+# include <curses.h>
+# include <string.h>
+
+# define MAX(a,b) ((a>b?a:b))
 
 // 难度
 int complexity;
@@ -36,6 +40,9 @@ struct TestRecord {
 // 测试记录数组
 struct TestRecord *record;
 
+// 显示游戏开始信息
+void display_gamestart();
+
 // 用户选择
 void get_options();
 
@@ -62,6 +69,8 @@ void input_error();
 // 获得是否带括号
 void get_has_brace();
 
+void display_choice(const char** choices,int num);
+
 // 生成单个题目，并保存测试结果到参数record中
 void test_single_problem(struct TestRecord *record);
 
@@ -78,36 +87,28 @@ int main() {
     record = (struct TestRecord *) malloc(problem_num * sizeof(struct TestRecord));
 
     // 开始测试
-    start_test();
+    /*  start_test(); */
 
     // 保存测试记录
-    save_record();
+    /*  save_record(); */
 
     // 释放内存
-    free(record);
-
+    /*  free(record); */
     return 0;
 }
 
 void get_options() {
-    // 难度
     get_complexity();
-    // 是否有负数
     get_has_negative();
-    // 是否有小数
     get_has_float();
-    // 运算数个数
-    get_operator_num();
-    // 是否有括号
     get_has_brace();
-    // 题目类型
     get_problem_type();
-    // 题量
+    get_operator_num();
     get_problem_num();
 }
 
 void get_complexity() {
-    printf("请输入难度(10, 100, 1000)：");
+    printf("请输入难度(10, 100, 1000): ");
     scanf("%d", &complexity);
     printf("\n");
 }
@@ -144,9 +145,9 @@ void get_has_brace(){
     printf("是否带括号(Y/N): ");
     char t[2];
     scanf("%s",t);
-    if(t[0] == 'Y'){
+    if(t[0] == 'Y' || t[0] == 'y'){
         has_brace = 1;
-    }else if (t[0] == 'N'){
+    }else if (t[0] == 'N' || t[0] == 'n'){
         has_brace = 0;
     }else{
         input_error();
@@ -161,7 +162,7 @@ void get_operator_num() {
 }
 
 void get_problem_type() {
-    printf("请输入题目类型(0:填写结果, 1:对错判断 ,2: 选择题");
+    printf("请输入题目类型(0:填写结果, 1:对错判断 ,2: 选择题): ");
     int t;
     scanf("%d\n",&t);
     switch(t){
@@ -180,9 +181,18 @@ void get_problem_type() {
     printf("\n");
 }
 
+void get_problem_num(){
+    printf("输入题目数量: ");
+    scanf("%d", &problem_num);
+    system("clear");
+}
+
 void input_error() {
     fprintf(stderr, "input error");
     exit(1);
+}
+
+void test_single_problem(struct TestRecord* record){
 }
 
 void start_test() {
